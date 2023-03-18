@@ -14,10 +14,10 @@ model users {
   user_id  Int        @id(map: "pk_user_id") @default(autoincrement())
   fullname String     @db.VarChar(255)
   email    String     @unique() @db.VarChar(255)
-  username String     @db.VarChar(255)
+  username String     @unique() @db.VarChar(255)
   password String     @db.Text()
   salt     String     @db.Text()
-  token    String     @db.Text()
+  token    String?    @db.Text()
   messages messages[]
 
   @@index([user_id])
