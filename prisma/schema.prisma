@@ -24,12 +24,13 @@ model users {
 }
 
 model messages {
-  message_id   Int      @id(map: "pk_message_id") @default(autoincrement())
-  title        String   @db.VarChar(255)
-  content      String   @db.Text()
-  created_date DateTime @default(now())
+  message_id   Int       @id(map: "pk_message_id") @default(autoincrement())
+  title        String    @db.VarChar(255)
+  content      String    @db.Text()
+  created_date DateTime  @default(now())
+  updated_date DateTime?
   user_id      Int
-  users        users?   @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: Cascade, map: "fk_messages_user_id")
+  users        users?    @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: Cascade, map: "fk_messages_user_id")
 
   @@index([message_id, user_id])
 }
