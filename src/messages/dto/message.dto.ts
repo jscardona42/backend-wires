@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsNumber } from 'class-validator';
 
 export class CreateMessageDto {
   @IsNotEmpty()
@@ -6,11 +6,13 @@ export class CreateMessageDto {
   @IsNotEmpty()
   content: string;
   @IsNotEmpty()
+  @IsNumber()
   user_id: number;
 }
 
 export class UpdateMessageDto {
   @IsNotEmpty()
+  @IsNumber()
   message_id: number;
   title?: string;
   content?: string;
@@ -19,4 +21,5 @@ export class UpdateMessageDto {
 export class FilterMessageDto {
   fullname?: string;
   created_date?: Date;
+  created_time?: Date;
 }

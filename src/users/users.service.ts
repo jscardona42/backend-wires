@@ -7,8 +7,6 @@ import { CreateUserDto, SignInUserDto } from './dto/user.dto';
 import * as bcrypt from 'bcryptjs';
 import { PrismaService } from 'src/prisma.service';
 import { JwtService } from '@nestjs/jwt';
-import { User } from './entities/user.entity';
-
 @Injectable()
 export class UsersService {
   constructor(

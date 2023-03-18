@@ -5,6 +5,7 @@ export class Message {
   title: string;
   content: string;
   created_date: Date;
+  created_time: Date;
   updated_date: Date;
   users?: User;
 }
