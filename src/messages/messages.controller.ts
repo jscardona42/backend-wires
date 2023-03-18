@@ -26,7 +26,7 @@ export class MessagesController {
     return this.messagesService.getMessageByUserId(user_id);
   }
 
-  @Post()
+  @Post('create')
   createMessage(@Body() data: CreateMessageDto): Promise<Message> {
     return this.messagesService.createMessage(data);
   }

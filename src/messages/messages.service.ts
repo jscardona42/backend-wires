@@ -15,15 +15,16 @@ export class MessagesService {
     private usersService: UsersService,
   ) {}
 
-  async getMessages(): Promise<Message[]> {
+  async getMessages(): Promise<any[]> {
     return this.prismaService.messages.findMany({
-      include: { users: true },
+      include: { users: { select: { fullname: true, user_id: true } } },
     });
   }
 
-  async getMessageById(message_id: number): Promise<Message> {
+  async getMessageById(message_id: number): Promise<any> {
     const message = await this.prismaService.messages.findUnique({
       where: { message_id: message_id },
+      include: { users: { select: { fullname: true, user_id: true } } },
     });
 
     if (message == null) {
@@ -34,14 +35,19 @@ export class MessagesService {
     return message;
   }
 
-  async getFilterMessages(data: FilterMessageDto): Promise<Message[]> {
+  async getFilterMessages(data: FilterMessageDto): Promise<any[]> {
     return this.prismaService.messages.findMany({
       where: {
-        OR: [
-          { users: { fullname: data.fullname } },
-          { created_date: { equals: data.created_date } },
+        AND: [
+          {
+            users: {
+              fullname: { contains: data.fullname, mode: 'insensitive' },
+            },
+          },
+          { created_date: new Date(data.created_date) },
         ],
       },
+      include: { users: { select: { fullname: true, user_id: true } } },
     });
   }
 
@@ -53,13 +59,12 @@ export class MessagesService {
     });
   }
 
-  async createMessage(data: CreateMessageDto): Promise<Message> {
+  async createMessage(data: CreateMessageDto): Promise<any> {
     await this.usersService.getUserById(data.user_id);
 
     return this.prismaService.messages.create({
-      data: {
-        ...data,
-      },
+      data: { ...data },
+      include: { users: { select: { fullname: true, user_id: true } } },
     });
   }
 
