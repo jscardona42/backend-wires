@@ -16,7 +16,7 @@ export class UsersService {
     private jwtService: JwtService,
   ) {}
 
-  async getUserById(user_id: number) {
+  async getUserById(user_id: number): Promise<any> {
     const user = await this.prismaService.users.findUnique({
       where: { user_id: user_id },
       select: { fullname: true, email: true, user_id: true, username: true },
@@ -30,7 +30,7 @@ export class UsersService {
     return user;
   }
 
-  async createUser(data: CreateUserDto) {
+  async createUser(data: CreateUserDto): Promise<any> {
     let salt = await bcrypt.genSalt();
     let password = await bcrypt.hash(data.password, salt);
 
@@ -43,7 +43,7 @@ export class UsersService {
           password: password,
           salt: salt,
         },
-        select: { username: true, user_id: true },
+        select: { username: true, user_id: true, fullname: true, email: true },
       });
     } catch (error) {
       if (error.code == 'P2002') {
@@ -54,7 +54,7 @@ export class UsersService {
     }
   }
 
-  async signInUser(data: SignInUserDto) {
+  async signInUser(data: SignInUserDto): Promise<any> {
     let user = await this.prismaService.users.findFirst({
       where: { username: data.username },
     });
@@ -74,22 +74,23 @@ export class UsersService {
       throw new UnauthorizedException(`Credenciales inválidas`);
     }
 
-    const token = this.jwtService.sign({ usuario_id: user2.user_id });
+    const token = this.jwtService.sign({ user_id: user2.user_id });
     return this.saveToken(token, user2);
   }
 
-  async logOut(user_id: number) {
+  async logOut(user_id: number): Promise<any> {
     await this.getUserById(user_id);
 
     return this.prismaService.users.update({
       where: { user_id: user_id },
       data: { token: null },
+      select: { username: true, user_id: true, fullname: true, email: true },
     });
   }
 
-  async saveToken(token: any, usuario: User) {
+  async saveToken(token: any, user: any): Promise<any>  {
     return this.prismaService.users.update({
-      where: { user_id: usuario.user_id },
+      where: { user_id: user.user_id },
       data: { token: token },
       select: {
         username: true,
