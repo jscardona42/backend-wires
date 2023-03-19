@@ -51,11 +51,12 @@ export class MessagesService {
     });
   }
 
-  async getMessageByUserId(user_id: number): Promise<Message> {
+  async getMessageByUserId(user_id: number): Promise<any[]> {
     await this.usersService.getUserById(user_id);
 
-    return this.prismaService.messages.findFirst({
+    return this.prismaService.messages.findMany({
       where: { user_id: user_id },
+      include: { users: { select: { fullname: true, user_id: true } } },
     });
   }
 

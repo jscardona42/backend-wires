@@ -54,7 +54,7 @@ export class UsersService {
 
   async signInUser(data: SignInUserDto): Promise<any> {
     let user = await this.prismaService.users.findFirst({
-      where: { username: data.username },
+      where: { email: data.email },
     });
 
     if (user == null) {
@@ -63,7 +63,7 @@ export class UsersService {
 
     let user2 = await this.prismaService.users.findFirst({
       where: {
-        username: data.username,
+        email: data.email,
         password: await bcrypt.hash(data.password, user.salt),
       },
     });
@@ -76,7 +76,7 @@ export class UsersService {
     return this.saveToken(token, user2);
   }
 
-  async logOut(user_id: number): Promise<any> {
+  async logOutUser(user_id: number): Promise<any> {
     await this.getUserById(user_id);
 
     return this.prismaService.users.update({
@@ -86,7 +86,7 @@ export class UsersService {
     });
   }
 
-  async saveToken(token: any, user: any): Promise<any>  {
+  async saveToken(token: any, user: any): Promise<any> {
     return this.prismaService.users.update({
       where: { user_id: user.user_id },
       data: { token: token },

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
 import { MessagesService } from './messages.service';
 import {
   CreateMessageDto,
@@ -21,9 +21,9 @@ export class MessagesController {
     return this.messagesService.getFilterMessages(data);
   }
 
-  @Get('byuserid')
-  async getMessageByUserId(@Body('user_id') user_id: number): Promise<Message> {
-    return this.messagesService.getMessageByUserId(user_id);
+  @Get('byuserid/:user_id')
+  async getMessageByUserId(@Param('user_id') user_id: number): Promise<Message[]> {
+    return this.messagesService.getMessageByUserId(+user_id);
   }
 
   @Post('create')

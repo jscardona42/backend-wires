@@ -18,7 +18,7 @@ export class UsersController {
   }
 
   @Patch('logout')
-  logOut(@Body('user_id') user_id: number): Promise<User> {
-    return this.usersService.logOut(user_id);
+  logOutUser(@Body('user_id') user_id: number): Promise<User> {
+    return this.usersService.logOutUser(user_id);
   }
 }
