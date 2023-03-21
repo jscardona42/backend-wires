@@ -32,6 +32,9 @@
 $ npm install
 ```
 
+## Migrante prisma
+$ npx prisma db push
+
 ## Running the app
 
 ```bash
